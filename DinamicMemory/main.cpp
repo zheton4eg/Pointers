@@ -3,9 +3,15 @@
 using namespace std;
 using std::cout;
 //#define DINAMIC_MEMORY_1
-#define DINAMIC_MEMORY_2
+//#define DINAMIC_MEMORY_2
+#define performance_check
+#define SYNTAX
+//#define NEVER_DO_IN_THIS_WAY
 
 #define tab "\t"
+
+int** Allocate(const int rows, const int cols);
+void Clear(int** arr, const int rows);
 
 void FillRand(int arr[], const int n);
 void FillRand(int** arr, const int rows,const int cols);
@@ -21,6 +27,12 @@ int* pop_front(int arr[], int& n);
 
 int* insert(int arr[], int& n, const int value, int index);
 int* erase(int arr[], int& n, const int index);
+
+int** push_row_back(int** arr, int& rows, const int cols);
+int** push_row_front(int** arr, int& rows, const int cols);
+int** insert_row(int** arr, int& rows, const int cols, int position);
+
+int** pop_row_back(int** arr, int& rows, const int cols);
 
 void main()
 {
@@ -63,13 +75,71 @@ void main()
 	delete[] arr;
 #endif // DINAMIC_MEMORY_1
 
-	int rows = 3;
-	int cols = 4;
-	//////////////////////////////////////////////////////////////////////////
-   /////          Обьявление двумерного динамического массива           /////
-  //////////////////////////////////////////////////////////////////////////
+#ifdef DINAMIC_MEMORY_2
+	int rows;
+	int cols;
+	cout << "Введите колличество строк: "; cin >> rows;
+	cout << "Введите колличество элементов строки: "; cin >> cols;
 
-     //1) Создаём массив указателей:
+	int** arr = Allocate(rows, cols);
+	cout << "Memory allocated, loading data" << endl;
+	FillRand(arr, rows, cols);
+	cout << "Data loaded" << endl;
+	cout << "Press any key to add row" << endl;
+	system("PAUSE");
+
+	arr = push_row_back(arr, rows, cols);
+	cout << "Row added" << endl;
+	cout << "To clear memory";
+	system("PAUSE");
+
+	Clear(arr, rows);
+#endif // DINAMIC_MEMORY_2
+#ifdef performance_check
+	int rows;
+	int cols;
+	cout << "Введите колличество строк: "; cin >> rows;
+	cout << "Введите колличество элементов строки: "; cin >> cols;
+
+	int** arr = Allocate(rows, cols);
+
+	FillRand(arr, rows, cols);
+	Print(arr, rows, cols);
+	cout << endl;
+
+	arr = push_row_back(arr, rows, cols);
+	FillRand(arr[rows - 1], cols);
+	Print(arr, rows, cols);
+	cout << endl;
+
+	arr = push_row_front(arr, rows, cols);
+	FillRand(arr[0], cols);
+	Print(arr, rows, cols);
+	cout << endl;
+
+	int index;
+	cout << "Введите позицию добавляемой строки: "; cin >> index;
+	arr = insert_row(arr, rows, cols, index);
+	FillRand(arr[index], cols);
+	Print(arr, rows, cols);
+	cout << endl;
+
+	arr = pop_row_back(arr, rows, cols);
+	Print(arr, rows, cols);
+	cout << endl;
+
+	Clear(arr, rows);
+	cout << endl;
+#endif // performance_check
+
+}
+int** Allocate(const int rows, const int cols)
+{
+	//////////////////////////////////////////////////////////////////////////
+/////          Обьявление двумерного динамического массива           /////
+//////////////////////////////////////////////////////////////////////////
+
+   //1) Создаём массив указателей:
 	int** arr = new int* [rows];
 
 	//2) Выделяем память под строки:
@@ -79,10 +149,15 @@ void main()
 	}
 	//////////////////////////////////////////////////////////////////////////
    /////     Обращение к элементам двумерного динамического массива     /////
-  //////////////////////////////////////////////////////////////////////////
-	FillRand(arr, rows, cols);
-	Print(arr, rows, cols);
-	
+  //////////////////////////////////////////////////////////////////////////  
+	return arr;
+}
+void Clear(int** arr, const int rows)
+{
+	for (int i = 0; i < rows; i++)
+	{
+		delete[]arr[i];
+	}
 }
 void FillRand(int arr[], const int n)
 {
@@ -206,5 +281,62 @@ int* erase(int arr[], int& n, const int index)
 		buffer[i] = arr[i+1];
 	}
 	delete[]arr;
+	return buffer;
+}
+int** push_row_back(int** arr, int& rows, const int cols)
+{
+
+#ifdef NEVER_DO_IN_THIS_WAY
+	int** buffer = Allocate(rows + 1, cols);
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			buffer[i][j] = arr[i][j];
+		}
+	}
+	Clear(arr, rows);
+	buffer[rows++] = new int[cols];
+	return buffer;
+#endif // NEVER_DO_IN_THIS_WAY
+	int** buffer = new int* [rows + 1];
+		for(int i = 0; i < rows; i++)
+		{
+			buffer[i] = arr[i];
+		}
+		delete[]arr;
+		buffer[rows] = new int[cols] {};
+		rows++;
+		return buffer;
+}
+int** push_row_front(int** arr, int& rows, const int cols)
+{
+	int** buffer = new int* [rows + 1];
+	for (int i = 0; i < rows; i++)
+	{
+		buffer[i+1] = arr[i];
+	}
+	delete[]arr;
+	buffer[0] = new int[cols] {};
+	rows++;
+	return buffer;
+}
+int** insert_row(int** arr, int& rows, const int cols, int position)
+{
+	int** buffer = new int* [rows + 1];
+	for (int i = 0; i < rows; i++)buffer[i] = arr[i];
+	for (int i = position; i < rows; i++)buffer[i + 1] = arr[i];
+    delete[]arr;
+	buffer[position] = new int[cols];
+	rows++;
+	return buffer;
+}
+
+int** pop_row_back(int** arr, int& rows, const int cols)
+{
+	int** buffer = new int* [--rows];
+	for (int i = 0; i < rows; i++)buffer[i] = arr[i];
+	delete[]arr[rows];
+	delete arr;
 	return buffer;
 }
