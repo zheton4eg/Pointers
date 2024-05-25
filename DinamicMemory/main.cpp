@@ -5,7 +5,7 @@ using std::cout;
 //#define DINAMIC_MEMORY_1
 //#define DINAMIC_MEMORY_2
 #define performance_check
-#define SYNTAX
+//#define SYNTAX
 //#define NEVER_DO_IN_THIS_WAY
 
 #define tab "\t"
@@ -31,8 +31,11 @@ int* erase(int arr[], int& n, const int index);
 int** push_row_back(int** arr, int& rows, const int cols);
 int** push_row_front(int** arr, int& rows, const int cols);
 int** insert_row(int** arr, int& rows, const int cols, int position);
+int** erase_row(int** arr, int& rows, const int cols, int index2);
 
 int** pop_row_back(int** arr, int& rows, const int cols);
+
+void push_col_back(int** arr, const int rows, int& cols);
 
 void main()
 {
@@ -123,10 +126,17 @@ void main()
 	FillRand(arr[index], cols);
 	Print(arr, rows, cols);
 	cout << endl;
-
-	arr = pop_row_back(arr, rows, cols);
+	int index2;
+	cout << "¬ведите позицию удал€емой строки: "; cin >> index2;
+	arr = erase_row(arr, rows, cols, index2);
+	FillRand(arr[index2], cols);
 	Print(arr, rows, cols);
 	cout << endl;
+
+	push_col_back(arr, rows, cols);
+	Print(arr, rows, cols);
+	
+
 
 	Clear(arr, rows);
 	cout << endl;
@@ -239,7 +249,6 @@ int* pop_back(int arr[], int& n)
 		buffer[i] = arr[i];
 	}
 	delete[]arr;
-	
 	return buffer;
 }
 int* pop_front(int arr[], int& n)
@@ -331,6 +340,14 @@ int** insert_row(int** arr, int& rows, const int cols, int position)
 	rows++;
 	return buffer;
 }
+int** erase_row(int** arr, int& rows, const int cols, int index2)
+{
+	int** buffer = new int*[rows-1];
+	for (int i = 0; i < index2; i++)buffer[i] = arr[i];
+for (int i = index2; i < rows; i++)buffer[i] = arr[i+1];
+    delete[]arr;
+	return buffer;
+}
 
 int** pop_row_back(int** arr, int& rows, const int cols)
 {
@@ -339,4 +356,15 @@ int** pop_row_back(int** arr, int& rows, const int cols)
 	delete[]arr[rows];
 	delete arr;
 	return buffer;
+}
+void push_col_back(int** arr, const int rows, int& cols)
+{
+	for (int i = 0; i < rows; i++)
+	{
+		int* buffer = new int[cols + 1];
+		for (int j = 0; j < cols; j++)buffer[j] = arr[i][j];
+		delete[]arr[i];
+		arr[i] = buffer;
+	}
+	cols++;
 }
