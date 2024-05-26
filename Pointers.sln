@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Split", "Split\Split.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SplitClasswork2", "SplitClasswork2\SplitClasswork2.vcxproj", "{DAFC43E6-7822-40DC-8B45-F09F99C13E01}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DINMEMOR2(dop)", "DINMEMOR2(dop)\DINMEMOR2(dop).vcxproj", "{E6A0699C-C052-4AA7-A703-78BEAEB5A975}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{DAFC43E6-7822-40DC-8B45-F09F99C13E01}.Release|x64.Build.0 = Release|x64
 		{DAFC43E6-7822-40DC-8B45-F09F99C13E01}.Release|x86.ActiveCfg = Release|Win32
 		{DAFC43E6-7822-40DC-8B45-F09F99C13E01}.Release|x86.Build.0 = Release|Win32
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Debug|x64.ActiveCfg = Debug|x64
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Debug|x64.Build.0 = Debug|x64
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Debug|x86.ActiveCfg = Debug|Win32
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Debug|x86.Build.0 = Debug|Win32
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Release|x64.ActiveCfg = Release|x64
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Release|x64.Build.0 = Release|x64
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Release|x86.ActiveCfg = Release|Win32
+		{E6A0699C-C052-4AA7-A703-78BEAEB5A975}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
