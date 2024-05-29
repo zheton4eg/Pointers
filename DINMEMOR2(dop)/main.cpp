@@ -17,8 +17,6 @@ void main()
 	int value;
 	cout << "¬ведите добавл€емое значение: "; cin >> value;
 
-	
-	
 	Print(arr, n);
 
 	arr=Push_back(arr, n, value);
