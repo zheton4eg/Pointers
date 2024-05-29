@@ -1,24 +1,26 @@
 #include <iostream>
 using namespace std;
-//#define DIN_MEM_1
+#define DIN_MEM_1
 //#define DIN_MEM_2
 
 #define tab "\t"
+void FillRand(int arr[], const int n, int minRand=0, int maxRand=100);
+void FillRand(double arr[], const int n, int minRand=0, int maxRand=100);
+void FillRand(char arr[], const int n, int minRand=0, int maxRand=100);
 
-void FillRand(int** arr, const int rows, const int cols);
-void Print(int arr[], const int n);
+template<typename T>void Print(T arr[], const int n);
 
-int* Push_back(int arr[], int& n, const int value);
-int* Push_front(int arr[], int& n, const int value);
+template<typename T>T* Push_back(T arr[], int& n, const T value);
+template<typename T>T* Push_front(T arr[], int& n, const T value);
 
-int* Pop_back(int arr[], int& n);
-int* Pop_Front(int arr[], int& n);
+template<typename T>T* Pop_back(T arr[], int& n);
+template<typename T>T* Pop_Front(T arr[], int& n);
 
-int* Insert(int arr[], int& n, const int value, int index);
-int* Erase(int arr[], int& n, int index);
+template<typename T>T* Insert(T arr[], int& n, const T value, int index);
+template<typename T>T* Erase (T arr[], int& n, int index);
 
 int** Allocated(const int rows, const int cols);
-void FillRand(int arr[], const int n);
+void FillRand(int** arr, const int rows, const int cols);
 void Print(int** arr, const int rows, const int cols);
 
 int** Push_row_back(int** arr, int& rows, const int cols);
@@ -43,44 +45,46 @@ void main()
 #ifdef DIN_MEM_1
 	int n = 5;
 	cout << "¬ведите размер массива: "; cin >> n;
-
-	int* arr = new int[n];
+	typedef double DataType;
+	DataType* arr = new DataType[n];
 
 	FillRand(arr, n);
 	Print(arr, n); cout << endl;
-	int value;
-	cout << "¬ведите добавл€емое значение в конец: "; cin >> value; cout << endl;
 
+	DataType value;
+	cout << "¬ведите добавл€емое значение в конец: "; cin >> value; cout << endl;
+	
 	arr = Push_back(arr, n, value);
 	Print(arr, n); cout << endl;
-
+	
 	cout << "¬ведите добавл€емое значение в начало: "; cin >> value; cout << endl;
 	arr = Push_front(arr, n, value);
 	Print(arr, n); cout << endl;
-
+	
 	arr = Pop_back(arr, n);
 	Print(arr, n); cout << tab "”даление последнего элемента"; cout << endl;
-
+	
 	arr = Pop_Front(arr, n);
 	Print(arr, n); cout << tab "”даление первого элемента"; cout << endl;
-
+	
 	cout << "¬ведите добавл€емое значение: "; cin >> value;
 	int index;
 	cout << "¬ведите индекс добавл€емого значени€: "; cin >> index; cout << endl;
-
+	
 	arr = Insert(arr, n, value, index);
 	Print(arr, n); cout << endl;
-
+	
 	cout << "¬ведите индекс удал€емого значени€: "; cin >> index; cout << endl;
-
+	
 	arr = Erase(arr, n, index);
 	Print(arr, n);
-
+	
 	delete[]arr;
 
 
 #endif // DIN_MEM_1
 
+#ifdef DIN_MEM_2
 	int rows = 3;
 	int cols = 4;
 
@@ -142,20 +146,39 @@ void main()
 	Print(arr, rows, cols); cout << endl;
 
 	Clear(arr, rows);
-}
-void FillRand(int arr[], const int n)
-{
-	for (int i = 0; i < n; i++)arr[i] = rand() % 100;
-}
+#endif // DIN_MEM_2
 
-void Print(int arr[], const int n)
+}
+void FillRand(int arr[], const int n, int minRand, int maxRand)
+{
+	for (int i = 0; i < n; i++)*(arr+i) = rand()% (maxRand-minRand)+minRand;
+}
+void FillRand(double arr[], const int n, int minRand, int maxRand)
+{
+	minRand *= 100;
+	maxRand *= 100;
+
+	for (int i = 0; i < n; i++)
+	{
+		*(arr + i) = rand() % (maxRand - minRand) + minRand;
+		*(arr + i) /= 100;
+	}
+}
+void FillRand(char arr[], const int n, int minRand, int maxRand)
+{
+	for (int i = 0; i < n; i++)
+	{
+		*(arr + i) = rand();
+	}
+}
+template<typename T>void Print(T arr[], const int n)
 {
 	for (int i = 0; i < n; i++)cout << arr[i] << tab;
 }
 
-int* Push_back(int arr[], int& n, const int value)
+template<typename T>T* Push_back(T arr[], int& n, const T value)
 {
-	int* buffer = new int[n + 1];
+	T* buffer = new T[n + 1];
 	for (int i = 0; i < n; i++)buffer[i] = arr[i];
 	delete[]arr;
 	arr = buffer;
@@ -163,9 +186,9 @@ int* Push_back(int arr[], int& n, const int value)
 	n++;
 	return arr;
 }
-int* Push_front(int arr[], int& n, const int value)
+template<typename T>T* Push_front(T arr[], int& n, const T value)
 {
-	int* buffer = new int[n + 1];
+	T* buffer = new T[n + 1];
 	for (int i = 0; i < n; i++)buffer[i + 1] = arr[i];
 	delete[]arr;
 	buffer[0] = value;
@@ -173,23 +196,23 @@ int* Push_front(int arr[], int& n, const int value)
 	n++;
 	return arr;
 }
-int* Pop_back(int arr[], int& n)
+template<typename T>T* Pop_back(T arr[], int& n)
 {
-	int* buffer = new int[--n];
+	T* buffer = new T[--n];
 	for (int i = 0; i < n; i++)buffer[i] = arr[i];
 	delete[]arr;
 	return buffer;
 }
-int* Pop_Front(int arr[], int& n)
+template<typename T>T* Pop_Front(T arr[], int& n)
 {
-	int* buffer = new int[--n];
+	T* buffer = new T[--n];
 	for (int i = 0; i < n; i++)buffer[i] = arr[i + 1];
 	delete[]arr;
 	return buffer;
 }
-int* Insert(int arr[], int& n, const int value, int index)
+template<typename T>T* Insert(T arr[], int& n, const T value, int index)
 {
-	int* buffer = new int[n + 1];
+	T* buffer = new T[n + 1];
 	//for (int i = 0; i < index; i++)buffer[i] = arr[i];
 	//for (int i = index; i < n; i++)buffer[i + 1] = arr[i];
 	for (int i = 0; i < n; i++)(i < index ? buffer[i] : buffer[i + 1]) = arr[i];
@@ -199,9 +222,9 @@ int* Insert(int arr[], int& n, const int value, int index)
 	n++;
 	return arr;
 }
-int* Erase(int arr[], int& n, int index)
+template<typename T>T* Erase(T arr[], int& n, int index)
 {
-	int* buffer = new int[n - 1];
+	T* buffer = new T[n - 1];
 	//for (int i = 0; i < index; i++)buffer[i] = arr[i];
 	//for (int i = index; i < n; i++)buffer[i - 1] = arr[i];
 	for (int i = 0; i < n; i++)(i < index ? buffer[i] : buffer[i - 1]) = arr[i];
